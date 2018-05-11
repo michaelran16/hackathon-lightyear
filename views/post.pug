@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1 区块链新闻
+  p.lead Best blockchain news over the Internet.
+  hr
+  .row
+    each val in post_titles
+        .col-sm-4
+          h2 #{val['short_title']}
+          p #{val['short_body']}
+          p
+            a.btn.btn-default(href='/post/' + val['id'], role='button') View details »

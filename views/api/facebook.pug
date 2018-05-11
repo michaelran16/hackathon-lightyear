@@ -1,18 +1,18 @@
 extends ../layout
 
 block content
-  .pb-2.mt-2.mb-4.border-bottom
+  .page-header
     h2
       i.fab.fa-facebook-square(style='color: #335397').fa-sm
       | Facebook API
-  .btn-group.d-flex(role='group')
-    a.btn.btn-primary(href='https://developers.facebook.com/docs/graph-api/quickstart/', target='_blank').w-100
+  .btn-group.btn-group-justified
+    a.btn.btn-primary(href='https://developers.facebook.com/docs/graph-api/quickstart/', target='_blank')
       i.far.fa-check-square.fa-sm
       | Quickstart
-    a.btn.btn-primary(href='https://developers.facebook.com/tools/explorer', target='_blank').w-100
+    a.btn.btn-primary(href='https://developers.facebook.com/tools/explorer', target='_blank')
       i.fab.fa-facebook.fa-sm
       | Graph API Explorer
-    a.btn.btn-primary(href='https://developers.facebook.com/docs/graph-api/reference/', target='_blank').w-100
+    a.btn.btn-primary(href='https://developers.facebook.com/docs/graph-api/reference/', target='_blank')
       i.fas.fa-code-branch.fa-sm
       | API Reference
 

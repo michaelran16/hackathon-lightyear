@@ -33,6 +33,7 @@ dotenv.load({ path: '.env.example' });
 const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
+const postController = require('./controllers/post');
 const contactController = require('./controllers/contact');
 
 /**
@@ -65,55 +66,61 @@ app.set('view engine', 'pug');
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
-  src: path.join(__dirname, 'public'),
-  dest: path.join(__dirname, 'public')
+    src: path.join(__dirname, 'public'),
+    dest: path.join(__dirname, 'public')
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(expressValidator());
 app.use(session({
-  resave: true,
-  saveUninitialized: true,
-  secret: process.env.SESSION_SECRET,
-  cookie: { maxAge: 1209600000 }, // two weeks in milliseconds
-  store: new MongoStore({
-    url: process.env.MONGODB_URI,
-    autoReconnect: true,
-  })
+    resave: true,
+    saveUninitialized: true,
+    secret: process.env.SESSION_SECRET,
+    cookie: {
+        maxAge: 1209600000
+    }, // two weeks in milliseconds
+    store: new MongoStore({
+        url: process.env.MONGODB_URI,
+        autoReconnect: true,
+    })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-  if (req.path === '/api/upload') {
-    next();
-  } else {
-    lusca.csrf()(req, res, next);
-  }
+    if (req.path === '/api/upload') {
+        next();
+    } else {
+        lusca.csrf()(req, res, next);
+    }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
+    res.locals.user = req.user;
+    next();
 });
 app.use((req, res, next) => {
-  // After successful login, redirect back to the intended page
-  if (!req.user &&
-    req.path !== '/login' &&
-    req.path !== '/signup' &&
-    !req.path.match(/^\/auth/) &&
-    !req.path.match(/\./)) {
-    req.session.returnTo = req.originalUrl;
-  } else if (req.user &&
-    (req.path === '/account' || req.path.match(/^\/api/))) {
-    req.session.returnTo = req.originalUrl;
-  }
-  next();
+    // After successful login, redirect back to the intended page
+    if (!req.user &&
+        req.path !== '/login' &&
+        req.path !== '/signup' &&
+        !req.path.match(/^\/auth/) &&
+        !req.path.match(/\./)) {
+        req.session.returnTo = req.originalUrl;
+    } else if (req.user &&
+        (req.path === '/account' || req.path.match(/^\/api/))) {
+        req.session.returnTo = req.originalUrl;
+    }
+    next();
 });
-app.use(express.static(path.join(__dirname, 'public'), { maxAge: 31557600000 }));
+app.use(express.static(path.join(__dirname, 'public'), {
+    maxAge: 31557600000
+}));
 
 /**
  * Primary app routes.
@@ -135,6 +142,12 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+
+
+// http://localhost:8080/post
+app.get('/post', postController.index);
+app.get('/post/:postid', postController.viewPost);
+
 
 /**
  * API examples routes.
@@ -173,64 +186,94 @@ app.get('/api/google-maps', apiController.getGoogleMaps);
  * OAuth authentication routes. (Sign in)
  */
 app.get('/auth/instagram', passport.authenticate('instagram'));
-app.get('/auth/instagram/callback', passport.authenticate('instagram', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/instagram/callback', passport.authenticate('instagram', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/facebook', passport.authenticate('facebook', { scope: ['email', 'public_profile'] }));
-app.get('/auth/facebook/callback', passport.authenticate('facebook', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/facebook', passport.authenticate('facebook', {
+    scope: ['email', 'public_profile']
+}));
+app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/github', passport.authenticate('github'));
-app.get('/auth/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/github/callback', passport.authenticate('github', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/google', passport.authenticate('google', { scope: 'profile email' }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/google', passport.authenticate('google', {
+    scope: 'profile email'
+}));
+app.get('/auth/google/callback', passport.authenticate('google', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/twitter', passport.authenticate('twitter'));
-app.get('/auth/twitter/callback', passport.authenticate('twitter', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/twitter/callback', passport.authenticate('twitter', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
-app.get('/auth/linkedin', passport.authenticate('linkedin', { state: 'SOME STATE' }));
-app.get('/auth/linkedin/callback', passport.authenticate('linkedin', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect(req.session.returnTo || '/');
+app.get('/auth/linkedin', passport.authenticate('linkedin', {
+    state: 'SOME STATE'
+}));
+app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect(req.session.returnTo || '/');
 });
 
 /**
  * OAuth authorization routes. (API examples)
  */
 app.get('/auth/foursquare', passport.authorize('foursquare'));
-app.get('/auth/foursquare/callback', passport.authorize('foursquare', { failureRedirect: '/api' }), (req, res) => {
-  res.redirect('/api/foursquare');
+app.get('/auth/foursquare/callback', passport.authorize('foursquare', {
+    failureRedirect: '/api'
+}), (req, res) => {
+    res.redirect('/api/foursquare');
 });
 app.get('/auth/tumblr', passport.authorize('tumblr'));
-app.get('/auth/tumblr/callback', passport.authorize('tumblr', { failureRedirect: '/api' }), (req, res) => {
-  res.redirect('/api/tumblr');
+app.get('/auth/tumblr/callback', passport.authorize('tumblr', {
+    failureRedirect: '/api'
+}), (req, res) => {
+    res.redirect('/api/tumblr');
 });
-app.get('/auth/steam', passport.authorize('openid', { state: 'SOME STATE' }));
-app.get('/auth/steam/callback', passport.authorize('openid', { failureRedirect: '/api' }), (req, res) => {
-  res.redirect(req.session.returnTo);
+app.get('/auth/steam', passport.authorize('openid', {
+    state: 'SOME STATE'
+}));
+app.get('/auth/steam/callback', passport.authorize('openid', {
+    failureRedirect: '/api'
+}), (req, res) => {
+    res.redirect(req.session.returnTo);
 });
-app.get('/auth/pinterest', passport.authorize('pinterest', { scope: 'read_public write_public' }));
-app.get('/auth/pinterest/callback', passport.authorize('pinterest', { failureRedirect: '/login' }), (req, res) => {
-  res.redirect('/api/pinterest');
+app.get('/auth/pinterest', passport.authorize('pinterest', {
+    scope: 'read_public write_public'
+}));
+app.get('/auth/pinterest/callback', passport.authorize('pinterest', {
+    failureRedirect: '/login'
+}), (req, res) => {
+    res.redirect('/api/pinterest');
 });
 
 /**
  * Error Handler.
  */
 if (process.env.NODE_ENV === 'development') {
-  // only use in development
-  app.use(errorHandler());
+    // only use in development
+    app.use(errorHandler());
 }
 
 /**
  * Start Express server.
  */
 app.listen(app.get('port'), () => {
-  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-  console.log('  Press CTRL-C to stop\n');
+    console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+    console.log('  Press CTRL-C to stop\n');
 });
 
 module.exports = app;

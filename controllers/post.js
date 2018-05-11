@@ -2,6 +2,7 @@ const Post = require('../models/Post');
 
 var striptags = require('striptags');
 
+
 exports.index = (req, res) => {
     Post.find({}).then((posts) => {
         var postArray = [];
@@ -13,9 +14,6 @@ exports.index = (req, res) => {
                 body,
                 title
             } = doc;
-            console.log(source_url);
-            console.log(title);
-            console.log(_id);
 
             postArray.push({
                 'id': _id,
@@ -37,7 +35,6 @@ exports.index = (req, res) => {
         res.status(500).send('one of the queries failed', error);
     });
 };
-
 
 exports.viewPost = (req, res, next) => {
     console.log(req.params.postid);

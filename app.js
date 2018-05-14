@@ -20,12 +20,18 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-const upload = multer({ dest: path.join(__dirname, 'uploads') });
+var createError = require('http-errors');
+
+const upload = multer({
+    dest: path.join(__dirname, 'uploads')
+});
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
-dotenv.load({ path: '.env.example' });
+dotenv.load({
+    path: '.env.example'
+});
 
 /**
  * Controllers (route handlers).
@@ -51,9 +57,9 @@ const app = express();
  */
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('error', (err) => {
-  console.error(err);
-  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-  process.exit();
+    console.error(err);
+    console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+    process.exit();
 });
 
 /**
@@ -260,13 +266,31 @@ app.get('/auth/pinterest/callback', passport.authorize('pinterest', {
     res.redirect('/api/pinterest');
 });
 
-/**
- * Error Handler.
- */
-if (process.env.NODE_ENV === 'development') {
+/*** Error Handler.*/
+if (app.get('env') === 'development') {
     // only use in development
-    app.use(errorHandler());
+    // TODO: why do I need this?
+    app.use(errorHandler({
+        dumpExceptions: true,
+        showStack: true
+    }));
 }
+
+// catch 404 and forward to error handler
+app.use(function (req, res, next) {
+    next(createError(404));
+});
+
+// error handler
+app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error');
+});
 
 /**
  * Start Express server.

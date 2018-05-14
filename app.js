@@ -154,6 +154,9 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 app.get('/post', postController.index);
 app.get('/post/:postid', postController.viewPost);
 
+//http://localhost:8080/horizon/
+const horizonController = require('./controllers/horizon');
+app.use('/horizon', horizonController);
 
 /**
  * API examples routes.

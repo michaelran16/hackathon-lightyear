@@ -23,7 +23,7 @@ router.get('/', function (req, res) {
 });
 
 router.get('/transaction', async function (req, res) {
-    var str = "<p>start testing transaction...</p>";
+    var str = "<h2>start testing transaction...</h2>";
     var transaction;
 
     // Transactions require a valid sequence number that is specific to this account.
@@ -84,7 +84,7 @@ router.get('/transaction', async function (req, res) {
 
 // localhost:3000/trade_aggregation
 router.get('/trade_aggregation', async function (req, res) {
-    var str = "<p>start testing trade_aggregation...</p>";
+    var str = "<h2>start testing trade_aggregation...</h2>";
 
     // now try trade aggregator
     const assetObject1 = StellarSdk.Asset.native();
@@ -113,7 +113,7 @@ router.get('/trade_aggregation', async function (req, res) {
 
 // localhost:3000/trust_recp
 router.get('/trust_recp', async function (req, res) {
-    var str = "<p>start building trustline...</p>";
+    var str = "<h2>start building trustline...</h2>";
 
     // Keys for accounts to issue and receive the new asset
     var issuingPublicKey = 'GAIUIQNMSXTTR4TGZETSQCGBTIF32G2L5P4AML4LFTMTHKM44UHIN6XQ';
@@ -154,8 +154,7 @@ router.get('/trust_recp', async function (req, res) {
 
 // localhost:3000/trust_recp
 router.get('/untrust_recp', async function (req, res) {
-    var str = "<h1><a href='/'>Home</a></h1>";
-    str += "<p>start to untrust...</p>";
+    var str = "<h2>start to untrust...</h2>";
 
     // Keys for accounts to issue and receive the new asset
     var issuingPublicKey = 'GAIUIQNMSXTTR4TGZETSQCGBTIF32G2L5P4AML4LFTMTHKM44UHIN6XQ';
@@ -197,7 +196,7 @@ router.get('/untrust_recp', async function (req, res) {
 //TODO need to fix payment and receive
 // localhost:3000/payment
 router.get('/payment', async function (req, res) {
-    var str = "<p>start testing payment...</p>";
+    var str = "<h2>start testing payment...</h2>";
 
     request.post({
         url: 'http://localhost:8006/payment',

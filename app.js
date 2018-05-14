@@ -39,7 +39,6 @@ dotenv.load({
 const homeController = require('./controllers/home');
 const userController = require('./controllers/user');
 const apiController = require('./controllers/api');
-const postController = require('./controllers/post');
 const contactController = require('./controllers/contact');
 
 /**
@@ -69,6 +68,8 @@ app.set('host', process.env.OPENSHIFT_NODEJS_IP || '0.0.0.0');
 app.set('port', process.env.PORT || process.env.OPENSHIFT_NODEJS_PORT || 8080);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
+
+// app.use() is to add middleware functions
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
@@ -151,6 +152,7 @@ app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userControl
 
 
 // http://localhost:8080/post
+const postController = require('./controllers/post');
 app.get('/post', postController.index);
 app.get('/post/:postid', postController.viewPost);
 

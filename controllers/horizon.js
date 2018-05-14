@@ -1,19 +1,6 @@
-// wiki.js - Wiki route module.
-
 var express = require('express');
 var router = express.Router();
 var StellarSdk = require('stellar-sdk');
-
-// Home page route.
-router.get('/main', function (req, res) {
-    res.send('Wiki home page');
-})
-
-// About page route.
-router.get('/about', function (req, res) {
-    res.send('About this wiki');
-})
-
 
 // The source account is the account we will be signing and sending from.
 var sourceSecretKey = 'SBEIC2LB5YBET63NZZWOYC4SDKF76ZVVQJKXHSKFVVWVLQ6VKXJAD4NX';
@@ -24,19 +11,19 @@ var receiverPublicKey = 'GAJUTZBH5GTVDBVFAXEBFEHSVQ4D2C3ZXIJPR5I3GYM3ASHRJLGX3EF
 var server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 //var server = new StellarSdk.Server('https://horizon.stellar.org');
 // var server = new StellarSdk.Server('http://localhost:8000/');
+
 StellarSdk.Network.useTestNetwork();
 // StellarSdk.Network.usePublicNetwork();
 
 
 router.get('/', function (req, res) {
     res.render('horizon/index', {
-        title: 'Horizon Examples'
+        title: 'Horizon Testing Tools'
     });
 });
 
 router.get('/transaction', async function (req, res) {
-    var str = "<h1><a href='/'>Home</a></h1>";
-    str += "<p>start testing transaction...</p>";
+    var str = "<p>start testing transaction...</p>";
     var transaction;
 
     // Transactions require a valid sequence number that is specific to this account.
@@ -89,17 +76,15 @@ router.get('/transaction', async function (req, res) {
 
     str += "<p>transaction submitted, see console for output</p>";
 
-    res.render('horizon/transaction', {
-        title: 'Horizon Examples',
-        content: str
+    res.render('horizon/index', {
+        title: 'Horizon Testing Tools',
+        dynamic_content: str
     });
-    res.send(str);
 });
 
 // localhost:3000/trade_aggregation
 router.get('/trade_aggregation', async function (req, res) {
-    var str = "<h1><a href='/'>Home</a></h1>";
-    str += "<p>start testing trade_aggregation...</p>";
+    var str = "<p>start testing trade_aggregation...</p>";
 
     // now try trade aggregator
     const assetObject1 = StellarSdk.Asset.native();
@@ -120,41 +105,15 @@ router.get('/trade_aggregation', async function (req, res) {
     console.log(trade_aggregation.url);
     str += "<p><a href='" + trade_aggregation.url + "'>Trade Agg URL</a></p>";
 
-    res.send(str);
-});
-
-// localhost:3000/payment
-router.get('/payment', async function (req, res) {
-    var str = "<h1><a href='/'>Home</a></h1>";
-    str += "<p>start testing payment...</p>";
-
-    request.post({
-        url: 'http://localhost:8006/payment',
-        form: {
-            amount: '1',
-            asset_code: 'AstroDollar',
-            asset_issuer: 'GAIUIQNMSXTTR4TGZETSQCGBTIF32G2L5P4AML4LFTMTHKM44UHIN6XQ',
-            destination: 'GACZKTYVNAAYCBBOM3IDL25MFESTZF62YCJTGR5FAKWCTLCSUWD57PNM',
-            source: 'SAV75E2NK7Q5JZZLBBBNUPCIAKABN64HNHMDLD62SZWM6EBJ4R7CUNTZ'
-        }
-    }, function (error, response, body) {
-        if (error || response.statusCode !== 200) {
-            console.error('ERROR!', error || body);
-        } else {
-            console.log('SUCCESS!', body);
-        }
-
-        str += "<p>payment post finished, check console</p>";
-        str += body;
-        // str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
-        res.send(str);
+    res.render('horizon/index', {
+        title: 'Horizon Testing Tools',
+        dynamic_content: str
     });
 });
 
 // localhost:3000/trust_recp
 router.get('/trust_recp', async function (req, res) {
-    var str = "<h1><a href='/'>Home</a></h1>";
-    str += "<p>start building trustline...</p>";
+    var str = "<p>start building trustline...</p>";
 
     // Keys for accounts to issue and receive the new asset
     var issuingPublicKey = 'GAIUIQNMSXTTR4TGZETSQCGBTIF32G2L5P4AML4LFTMTHKM44UHIN6XQ';
@@ -184,7 +143,11 @@ router.get('/trust_recp', async function (req, res) {
                     console.log(transactionResult._links.transaction.href);
 
                     str += JSON.stringify(transactionResult, null, 2);
-                    res.send(str);
+
+                    res.render('horizon/index', {
+                        title: 'Horizon Testing Tools',
+                        dynamic_content: str
+                    });
                 });
         })
 });
@@ -222,9 +185,45 @@ router.get('/untrust_recp', async function (req, res) {
                     console.log(transactionResult._links.transaction.href);
 
                     str += JSON.stringify(transactionResult, null, 2);
-                    res.send(str);
+
+                    res.render('horizon/index', {
+                        title: 'Horizon Testing Tools',
+                        dynamic_content: str
+                    });
                 });
         })
+});
+
+//TODO need to fix payment and receive
+// localhost:3000/payment
+router.get('/payment', async function (req, res) {
+    var str = "<p>start testing payment...</p>";
+
+    request.post({
+        url: 'http://localhost:8006/payment',
+        form: {
+            amount: '1',
+            asset_code: 'AstroDollar',
+            asset_issuer: 'GAIUIQNMSXTTR4TGZETSQCGBTIF32G2L5P4AML4LFTMTHKM44UHIN6XQ',
+            destination: 'GACZKTYVNAAYCBBOM3IDL25MFESTZF62YCJTGR5FAKWCTLCSUWD57PNM',
+            source: 'SAV75E2NK7Q5JZZLBBBNUPCIAKABN64HNHMDLD62SZWM6EBJ4R7CUNTZ'
+        }
+    }, function (error, response, body) {
+        if (error || response.statusCode !== 200) {
+            console.error('ERROR!', error || body);
+        } else {
+            console.log('SUCCESS!', body);
+        }
+
+        str += "<p>payment post finished, check console</p>";
+        str += body;
+        str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
+
+        res.render('horizon/index', {
+            title: 'Horizon Testing Tools',
+            dynamic_content: str
+        });
+    });
 });
 
 // localhost:3000/receive

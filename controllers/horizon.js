@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var StellarSdk = require('stellar-sdk');
+var request = require('request');
 
 // The source account is the account we will be signing and sending from.
 var sourceSecretKey = 'SBEIC2LB5YBET63NZZWOYC4SDKF76ZVVQJKXHSKFVVWVLQ6VKXJAD4NX';
@@ -196,7 +197,7 @@ router.get('/untrust_recp', async function (req, res) {
 //TODO need to fix payment and receive
 // localhost:3000/payment
 router.get('/payment', async function (req, res) {
-    var str = "<h2>start testing payment...</h2>";
+    var str = "<h2>start testing Bridge payment...</h2>";
 
     request.post({
         url: 'http://localhost:8006/payment',
@@ -216,7 +217,7 @@ router.get('/payment', async function (req, res) {
 
         str += "<p>payment post finished, check console</p>";
         str += body;
-        str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
+        //        str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
 
         res.render('horizon/index', {
             title: 'Horizon Testing Tools',

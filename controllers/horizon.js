@@ -23,8 +23,9 @@ router.get('/', function (req, res) {
     });
 });
 
-router.get('/transaction', async function (req, res) {
-    var str = "<h2>start testing transaction...</h2>";
+// http://localhost:8080/horizon/transaction
+router.get('/payment', async function (req, res) {
+    var str = "<h2>start testing transaction with payment opeartion...</h2>";
     var transaction;
 
     // Transactions require a valid sequence number that is specific to this account.
@@ -83,7 +84,58 @@ router.get('/transaction', async function (req, res) {
     });
 });
 
-// localhost:3000/trade_aggregation
+// http://localhost:8080/horizon/receive
+router.get('/receive', async function (req, res) {
+    var str = "<h2>start receiving payments...</h2>";
+    var accountId = receiverPublicKey;
+
+    // Create an API call to query payments involving the account.
+    var payments = server.payments().forAccount(accountId);
+
+    // If some payments have already been handled, start the results from the
+    // last seen payment. (See below in `handlePayment` where it gets saved.)
+    //    var lastToken = loadLastPagingToken();
+    //    if (lastToken) {
+    //        payments.cursor(lastToken);
+    //    }
+    payments.cursor('38646725614776321');
+
+    // `stream` will send each recorded payment, one by one, then keep the
+    // connection open and continue to send you new payments as they occur.
+    payments.stream({
+        onmessage: function (payment) {
+            // Record the paging token so we can start from here next time.
+            //            savePagingToken(payment.paging_token);
+            console.log("payment.paging_token is " + payment.paging_token);
+
+            // The payments stream includes both sent and received payments. We only
+            // want to process received payments here.
+            if (payment.to !== accountId) {
+                return;
+            }
+
+            // In Stellar’s API, Lumens are referred to as the “native” type. Other
+            // asset types have more detailed information.
+            var asset;
+            if (payment.asset_type === 'native') {
+                asset = 'lumens';
+            } else {
+                asset = payment.asset_code + ':' + payment.asset_issuer;
+            }
+
+            console.log(payment.amount + ' ' + asset + ' from ' + payment.from);
+        },
+
+        onerror: function (error) {
+            console.error('Error in payment stream');
+            //            var stack = new Error().stack
+            //            console.log(stack)
+            console.error(error.stack || error)
+        }
+    });
+});
+
+// http://localhost:8080/horizon/trade_aggregation
 router.get('/trade_aggregation', async function (req, res) {
     var str = "<h2>start testing trade_aggregation...</h2>";
 
@@ -112,7 +164,7 @@ router.get('/trade_aggregation', async function (req, res) {
     });
 });
 
-// localhost:3000/trust_recp
+// http://localhost:8080/horizon/trust_recp
 router.get('/trust_recp', async function (req, res) {
     var str = "<h2>start building trustline...</h2>";
 
@@ -153,7 +205,7 @@ router.get('/trust_recp', async function (req, res) {
         })
 });
 
-// localhost:3000/trust_recp
+// http://localhost:8080/horizon/untrust_recp
 router.get('/untrust_recp', async function (req, res) {
     var str = "<h2>start to untrust...</h2>";
 
@@ -194,9 +246,8 @@ router.get('/untrust_recp', async function (req, res) {
         })
 });
 
-//TODO need to fix payment and receive
-// localhost:3000/payment
-router.get('/payment', async function (req, res) {
+// http://localhost:8080/horizon/payment
+router.get('/bridge/payment', async function (req, res) {
     var str = "<h2>start testing Bridge payment...</h2>";
 
     request.post({
@@ -217,7 +268,7 @@ router.get('/payment', async function (req, res) {
 
         str += "<p>payment post finished, check console</p>";
         str += body;
-        //        str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
+        // str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
 
         res.render('horizon/index', {
             title: 'Horizon Testing Tools',
@@ -227,7 +278,7 @@ router.get('/payment', async function (req, res) {
 });
 
 // localhost:3000/receive
-router.post('/receive', function (request, response) {
+router.post('/bridge/receive', function (request, response) {
     var payment = request.body;
 
     // `receive` may be called multiple times for the same payment, so check that
@@ -257,11 +308,5 @@ router.post('/receive', function (request, response) {
 
     response.status(200).end();
 });
-
-//router.listen(8005,
-//function () {
-//    console.log('Bridge server callbacks running on port 8005!');
-//    console.log('Bridge server callbacks running on port 8005!');
-//});
 
 module.exports = router;

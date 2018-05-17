@@ -17,7 +17,6 @@ const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
 StellarSdk.Network.useTestNetwork();
 // StellarSdk.Network.usePublicNetwork();
 
-
 router.get('/', function (req, res) {
     res.render('horizon/index', {
         title: 'Horizon Testing Tools'

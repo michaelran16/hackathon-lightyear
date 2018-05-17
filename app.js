@@ -129,6 +129,23 @@ app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: 31557600000
 }));
 
+// http://localhost:8080/TODO-clean-up-routes
+// https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
+const routes = require('./routes');
+app.use('/TODO-clean-up-routes', routes);
+
+/**
+ * Additional app routes added by me.
+ */
+// http://localhost:8080/post
+const postController = require('./controllers/post');
+app.get('/post', postController.index);
+app.get('/post/:postid', postController.viewPost);
+
+//http://localhost:8080/horizon/
+const horizonController = require('./controllers/horizon');
+app.use('/horizon', horizonController);
+
 /**
  * Primary app routes.
  */
@@ -149,16 +166,6 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
-
-
-// http://localhost:8080/post
-const postController = require('./controllers/post');
-app.get('/post', postController.index);
-app.get('/post/:postid', postController.viewPost);
-
-//http://localhost:8080/horizon/
-const horizonController = require('./controllers/horizon');
-app.use('/horizon', horizonController);
 
 /**
  * API examples routes.

@@ -19,25 +19,26 @@ block content
         a(href='https://www.stellar.org/laboratory/#xdr-viewer', target="_blank") XDR Viewer
   hr
   .row
-    .col-sm-4
+    .col-sm-3
       h2 Horizon Server
       p
-        a.btn.btn-default(href='/horizon/payment', role='button') payment »
+        //- TODO use https://www.w3schools.com/bootstrap/bootstrap_buttons.asp
+        a.btn.btn-default.btn-block(href='/horizon/payment', role='button') Horizon payment »
         <br />
-        a.btn.btn-default(href='/horizon/receive', role='button') receive »
+        a.btn.btn-default.btn-block(href='/horizon/receive', role='button') Horizon receive »
         <br />
-        a.btn.btn-default(href='/horizon/trade_aggregation', role='button') trade_aggregation »
+        a.btn.btn-default.btn-block(href='/horizon/trade_aggregation', role='button') Horizon trade_aggregation »
         <br />
-        a.btn.btn-default(href='/horizon/trust_recp', role='button') trust_recp »
+        a.btn.btn-default.btn-block(href='/horizon/trust_recp', role='button') Horizon trust_recp »
         <br />
-        a.btn.btn-default(href='/horizon/untrust_recp', role='button') untrust_recp »
+        a.btn.btn-default.btn-block(href='/horizon/untrust_recp', role='button') uHorizon ntrust_recp »
         <br />
+    .col-sm-6
+        p !{dynamic_content}
+    .col-sm-3
       h2 Bridge Server
       p
-        a.btn.btn-default(href='/horizon/bridge/payment', role='button') Bridge payment »
+        a.btn.btn-default.btn-block(href='/horizon/bridge/payment', role='button') Bridge payment »
         <br />
-        a.btn.btn-default(href='/horizon/bridge/receive', role='button') Bridge receive »
+        a.btn.btn-default.btn-block(href='/horizon/bridge/receive', role='button') Bridge receive »
         <br />
-    .col-sm-8
-        p !{dynamic_content}
-        

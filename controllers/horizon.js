@@ -31,6 +31,7 @@ router.get('/payment', async function (req, res) {
 
     // Transactions require a valid sequence number that is specific to this account.
     // We can fetch the current sequence number for the source account from Horizon.
+    var paymentAmount = Math.round(Math.random() * 9999) / 1000;
     await server.loadAccount(sourcePublicKey)
         .then(function (account) {
             transaction = new StellarSdk.TransactionBuilder(account)
@@ -42,7 +43,7 @@ router.get('/payment', async function (req, res) {
                     // Specify 350.1234567 lumens. Lumens are divisible to seven digits past
                     // the decimal. They are represented in JS Stellar SDK in string format
                     // to avoid errors from the use of the JavaScript Number data structure.
-                    amount: '8.34567',
+                    amount: paymentAmount.toString(),
                 }))
                 // Uncomment to add a memo (https://www.stellar.org/developers/learn/concepts/transactions.html)
                 // .addMemo(StellarSdk.Memo.text('Hello world!'))

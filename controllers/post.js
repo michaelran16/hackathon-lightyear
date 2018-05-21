@@ -1,52 +1,52 @@
 const Post = require('../models/Post');
 
-var striptags = require('striptags');
+const striptags = require('striptags');
 
 
 exports.index = (req, res) => {
-    Post.find({}).then((posts) => {
-        var postArray = [];
+  Post.find({}).then((posts) => {
+    const postArray = [];
 
-        posts.forEach((doc) => {
-            let {
-                _id,
-                source_url,
-                body,
-                title
-            } = doc;
+    posts.forEach((doc) => {
+      const {
+        _id,
+        source_url,
+        body,
+        title
+      } = doc;
 
-            postArray.push({
-                'id': _id,
-                'short_title': title.substring(0, 9) + '...',
-                'full_title': title,
-                'source_url': source_url,
-                'short_body': striptags(body).substring(0, 99) + '...',
-                'full_body': body,
-            });
-        });
-
-        return Promise.all(postArray);
-    }).then(function (postArray) {
-        res.render('post', {
-            title: '区块链新闻',
-            post_titles: postArray
-        });
-    }).catch(function (error) {
-        res.status(500).send('one of the queries failed', error);
+      postArray.push({
+        id: _id,
+        short_title: `${title.substring(0, 9)}...`,
+        full_title: title,
+        source_url,
+        short_body: `${striptags(body).substring(0, 99)}...`,
+        full_body: body,
+      });
     });
+
+    return Promise.all(postArray);
+  }).then((postArray) => {
+    res.render('post', {
+      title: '区块链新闻',
+      post_titles: postArray
+    });
+  }).catch((error) => {
+    res.status(500).send('one of the queries failed', error);
+  });
 };
 
 exports.viewPost = (req, res, next) => {
-    console.log(req.params.postid);
+  console.log(req.params.postid);
 
-    Post.findById(req.params.postid, (err, article) => {
-        if (err) {
-            return next(err);
-        }
+  Post.findById(req.params.postid, (err, article) => {
+    if (err) {
+      return next(err);
+    }
 
-        console.log(article.title);
-        res.render('article', {
-            article: article
-        });
+    console.log(article.title);
+    res.render('article', {
+      article
     });
+  });
 };

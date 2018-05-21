@@ -20,17 +20,17 @@ const expressStatusMonitor = require('express-status-monitor');
 const sass = require('node-sass-middleware');
 const multer = require('multer');
 
-var createError = require('http-errors');
+const createError = require('http-errors');
 
 const upload = multer({
-    dest: path.join(__dirname, 'uploads')
+  dest: path.join(__dirname, 'uploads')
 });
 
 /**
  * Load environment variables from .env file, where API keys and passwords are configured.
  */
 dotenv.load({
-    path: '.env.example'
+  path: '.env.example'
 });
 
 /**
@@ -56,9 +56,9 @@ const app = express();
  */
 mongoose.connect(process.env.MONGODB_URI);
 mongoose.connection.on('error', (err) => {
-    console.error(err);
-    console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
-    process.exit();
+  console.error(err);
+  console.log('%s MongoDB connection error. Please make sure MongoDB is running.', chalk.red('✗'));
+  process.exit();
 });
 
 /**
@@ -73,65 +73,66 @@ app.set('view engine', 'pug');
 app.use(expressStatusMonitor());
 app.use(compression());
 app.use(sass({
-    src: path.join(__dirname, 'public'),
-    dest: path.join(__dirname, 'public')
+  src: path.join(__dirname, 'public'),
+  dest: path.join(__dirname, 'public')
 }));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-    extended: true
+  extended: true
 }));
 app.use(expressValidator());
 app.use(session({
-    resave: true,
-    saveUninitialized: true,
-    secret: process.env.SESSION_SECRET,
-    cookie: {
-        maxAge: 1209600000
-    }, // two weeks in milliseconds
-    store: new MongoStore({
-        url: process.env.MONGODB_URI,
-        autoReconnect: true,
-    })
+  resave: true,
+  saveUninitialized: true,
+  secret: process.env.SESSION_SECRET,
+  cookie: {
+    maxAge: 1209600000
+  }, // two weeks in milliseconds
+  store: new MongoStore({
+    url: process.env.MONGODB_URI,
+    autoReconnect: true,
+  })
 }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
-    if (req.path === '/api/upload') {
-        next();
-    } else {
-        lusca.csrf()(req, res, next);
-    }
+  if (req.path === '/api/upload') {
+    next();
+  } else {
+    lusca.csrf()(req, res, next);
+  }
 });
 app.use(lusca.xframe('SAMEORIGIN'));
 app.use(lusca.xssProtection(true));
 app.disable('x-powered-by');
 app.use((req, res, next) => {
-    res.locals.user = req.user;
-    next();
+  res.locals.user = req.user;
+  next();
 });
 app.use((req, res, next) => {
-    // After successful login, redirect back to the intended page
-    if (!req.user &&
+  // After successful login, redirect back to the intended page
+  if (!req.user &&
         req.path !== '/login' &&
         req.path !== '/signup' &&
         !req.path.match(/^\/auth/) &&
         !req.path.match(/\./)) {
-        req.session.returnTo = req.originalUrl;
-    } else if (req.user &&
+    req.session.returnTo = req.originalUrl;
+  } else if (req.user &&
         (req.path === '/account' || req.path.match(/^\/api/))) {
-        req.session.returnTo = req.originalUrl;
-    }
-    next();
+    req.session.returnTo = req.originalUrl;
+  }
+  next();
 });
 app.use(express.static(path.join(__dirname, 'public'), {
-    maxAge: 31557600000
+  maxAge: 31557600000
 }));
 
 // http://localhost:8080/TODO-clean-up-routes
 // https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
 const routes = require('./routes');
+
 app.use('/TODO-clean-up-routes', routes);
 
 /**
@@ -139,11 +140,13 @@ app.use('/TODO-clean-up-routes', routes);
  */
 // http://localhost:8080/post
 const postController = require('./controllers/post');
+
 app.get('/post', postController.index);
 app.get('/post/:postid', postController.viewPost);
 
-//http://localhost:8080/horizon/
+// http://localhost:8080/horizon/
 const horizonController = require('./controllers/horizon');
+
 app.use('/horizon', horizonController);
 
 /**
@@ -205,45 +208,45 @@ app.get('/api/google-maps', apiController.getGoogleMaps);
  */
 app.get('/auth/instagram', passport.authenticate('instagram'));
 app.get('/auth/instagram/callback', passport.authenticate('instagram', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/facebook', passport.authenticate('facebook', {
-    scope: ['email', 'public_profile']
+  scope: ['email', 'public_profile']
 }));
 app.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/github', passport.authenticate('github'));
 app.get('/auth/github/callback', passport.authenticate('github', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/google', passport.authenticate('google', {
-    scope: 'profile email'
+  scope: 'profile email'
 }));
 app.get('/auth/google/callback', passport.authenticate('google', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/twitter', passport.authenticate('twitter'));
 app.get('/auth/twitter/callback', passport.authenticate('twitter', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 app.get('/auth/linkedin', passport.authenticate('linkedin', {
-    state: 'SOME STATE'
+  state: 'SOME STATE'
 }));
 app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect(req.session.returnTo || '/');
+  res.redirect(req.session.returnTo || '/');
 });
 
 /**
@@ -251,65 +254,65 @@ app.get('/auth/linkedin/callback', passport.authenticate('linkedin', {
  */
 app.get('/auth/foursquare', passport.authorize('foursquare'));
 app.get('/auth/foursquare/callback', passport.authorize('foursquare', {
-    failureRedirect: '/api'
+  failureRedirect: '/api'
 }), (req, res) => {
-    res.redirect('/api/foursquare');
+  res.redirect('/api/foursquare');
 });
 app.get('/auth/tumblr', passport.authorize('tumblr'));
 app.get('/auth/tumblr/callback', passport.authorize('tumblr', {
-    failureRedirect: '/api'
+  failureRedirect: '/api'
 }), (req, res) => {
-    res.redirect('/api/tumblr');
+  res.redirect('/api/tumblr');
 });
 app.get('/auth/steam', passport.authorize('openid', {
-    state: 'SOME STATE'
+  state: 'SOME STATE'
 }));
 app.get('/auth/steam/callback', passport.authorize('openid', {
-    failureRedirect: '/api'
+  failureRedirect: '/api'
 }), (req, res) => {
-    res.redirect(req.session.returnTo);
+  res.redirect(req.session.returnTo);
 });
 app.get('/auth/pinterest', passport.authorize('pinterest', {
-    scope: 'read_public write_public'
+  scope: 'read_public write_public'
 }));
 app.get('/auth/pinterest/callback', passport.authorize('pinterest', {
-    failureRedirect: '/login'
+  failureRedirect: '/login'
 }), (req, res) => {
-    res.redirect('/api/pinterest');
+  res.redirect('/api/pinterest');
 });
 
-/*** Error Handler.*/
+/** * Error Handler. */
 if (app.get('env') === 'development') {
-    // only use in development
-    // TODO: why do I need this?
-    app.use(errorHandler({
-        dumpExceptions: true,
-        showStack: true
-    }));
+  // only use in development
+  // TODO: why do I need this?
+  app.use(errorHandler({
+    dumpExceptions: true,
+    showStack: true
+  }));
 }
 
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-    next(createError(404));
+app.use((req, res, next) => {
+  next(createError(404));
 });
 
 // error handler
-app.use(function (err, req, res, next) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+app.use((err, req, res, next) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-    // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
 });
 
 /**
  * Start Express server.
  */
 app.listen(app.get('port'), () => {
-    console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
-    console.log('  Press CTRL-C to stop\n');
+  console.log('%s App is running at http://localhost:%d in %s mode', chalk.green('✓'), app.get('port'), app.get('env'));
+  console.log('  Press CTRL-C to stop\n');
 });
 
 module.exports = app;

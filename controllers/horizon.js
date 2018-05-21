@@ -98,7 +98,8 @@ router.get('/receive', async (req, res) => {
   //    if (lastToken) {
   //        payments.cursor(lastToken);
   //    }
-  payments.cursor('38646725614776321');
+  // TODO change the paging token to be a stateful one
+  payments.cursor('38863380945047553');
 
   // `stream` will send each recorded payment, one by one, then keep the
   // connection open and continue to send you new payments as they occur.

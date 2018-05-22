@@ -1,0 +1,13 @@
+extends ../layout
+
+block content
+  h1 Paste Tool
+  p.lead Internal Tool for text sharing.
+  hr
+  .row
+    .col-sm-9
+      textarea#resp( name="resp", rows="26", placeholder='Input your text here', style="width:100%" )
+        | #{respStr}
+    .col-sm-3
+      a.btn.btn-default.btn-block(href='/paste/new', role='button') New Paste »
+      a.btn.btn-default.btn-block(href='/paste/new', role='button') Load Paste »

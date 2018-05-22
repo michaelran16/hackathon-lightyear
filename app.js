@@ -149,6 +149,11 @@ const horizonController = require('./controllers/horizon');
 
 app.use('/horizon', horizonController);
 
+// http://localhost:8080/paste/
+const pasteController = require('./controllers/paste');
+
+app.use('/paste', pasteController);
+
 /**
  * Primary app routes.
  */

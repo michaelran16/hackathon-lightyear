@@ -7,6 +7,7 @@ block content
   .row
     .col-sm-3
       a.btn.btn-default.btn-block(href='/paste/new', role='button') New Paste »
-      form(method='POST' action='/paste/load')
+      form(method='POST' action="/paste/load")
+        input(type='hidden', name='_csrf', value=_csrf)
         input#name.form-control(type='text', placeholder='Enter short ID here' name='short_id_input')
         button.btn.btn-default.btn-block(type='submit') Load »

@@ -20,9 +20,9 @@ router.get('/save', async (req, res) => {
 
 // TODO post the form
 router.post('/load', async (req, res) => {
-  res.render('paste/abc', {
-    title: 'Horizon Testing Tools',
-    dynamic_content: 'load load load'
+  console.log(req.body.short_id_input);
+  res.render('paste/view', {
+    respStr: req.body.short_id_input
   });
 });
 

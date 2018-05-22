@@ -5,9 +5,8 @@ block content
   p.lead Internal Tool for text sharing.
   hr
   .row
-    .col-sm-9
-      textarea#resp( name="resp", rows="26", placeholder='Input your text here', style="width:100%" )
-        | #{respStr}
     .col-sm-3
       a.btn.btn-default.btn-block(href='/paste/new', role='button') New Paste »
-      a.btn.btn-default.btn-block(href='/paste/new', role='button') Load Paste »
+      form(method='POST' action='/paste/load')
+        input#name.form-control(type='text', placeholder='Enter short ID here' name='short_id_input')
+        button.btn.btn-default.btn-block(type='submit') Load »

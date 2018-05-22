@@ -136,8 +136,8 @@ router.get('/receive', async (req, res) => {
   });
 });
 
-// http://localhost:8080/horizon/ tradeAggregation
-router.get('/ tradeAggregation', async (req, res) => {
+// http://localhost:8080/horizon/trade_aggregation
+router.get('/trade_aggregation', async (req, res) => {
   let str = '<h2>start testing  tradeAggregation...</h2>';
 
   // now try trade aggregator

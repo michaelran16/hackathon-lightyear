@@ -9,4 +9,29 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/save', async (req, res) => {
+  const str = '<h2>save</h2>';
+
+  res.render('paste/abc', {
+    title: 'Horizon Testing Tools',
+    dynamic_content: str
+  });
+});
+
+// TODO post the form
+router.post('/load', async (req, res) => {
+  res.render('paste/abc', {
+    title: 'Horizon Testing Tools',
+    dynamic_content: 'load load load'
+  });
+});
+
+router.get('/:shortId', async (req, res) => {
+  console.log(req.params.shortId);
+
+  res.render('paste/view', {
+    respStr: req.params.shortId
+  });
+});
+
 module.exports = router;

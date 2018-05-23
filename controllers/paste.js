@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.render('paste/index', {
+  res.render('paste/paste', {
     title: 'Paste Tools'
   });
 });

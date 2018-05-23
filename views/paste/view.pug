@@ -1,8 +1,11 @@
 extends ../layout
 
+block menu-item
+  li.nav-item(class=(title === 'Paste') ? 'active' : undefined)
+    a.nav-link(href='/paste') Paste
+
 block content
-  h1 
-    a(href='/paste') Paste Tool
+  h1 Paste Tool
   p.lead Internal Tool for text sharing.
   hr
   .row

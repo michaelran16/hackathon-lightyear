@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
-const postSchema = new Schema({
+const newsPostSchema = new Schema({
     author: ObjectId,
     body: String,
     source_url: String,
@@ -11,6 +11,6 @@ const postSchema = new Schema({
     date: Date
 });
 
-const Post = mongoose.model('Post', postSchema);
+const NewsPost = mongoose.model('Post', newsPostSchema);
 
-module.exports = Post;
+module.exports = NewsPost;

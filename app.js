@@ -142,7 +142,7 @@ app.use('/TODO-clean-up-routes', routes);
 const postController = require('./controllers/news');
 
 app.get('/news', postController.index);
-app.get('/news/:postid', postController.viewPost);
+app.get('/news/:postid', postController.viewNewsPost);
 
 // http://localhost:8080/horizon/
 const horizonController = require('./controllers/horizon');

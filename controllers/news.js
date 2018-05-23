@@ -1,13 +1,13 @@
-const Post = require('../models/Post');
+const NewsPost = require('../models/NewsPost');
 
 const striptags = require('striptags');
 
 
 exports.index = (req, res) => {
-  Post.find({}).limit(8).then((posts) => {
-    const postArray = [];
+  NewsPost.find({}).limit(8).then((news) => {
+    const newsArray = [];
 
-    posts.forEach((doc) => {
+    news.forEach((doc) => {
       const {
         _id,
         source_url,
@@ -15,7 +15,7 @@ exports.index = (req, res) => {
         title
       } = doc;
 
-      postArray.push({
+      newsArray.push({
         id: _id,
         short_title: `${title.substring(0, 9)}...`,
         full_title: title,
@@ -25,21 +25,21 @@ exports.index = (req, res) => {
       });
     });
 
-    return Promise.all(postArray);
-  }).then((postArray) => {
+    return Promise.all(newsArray);
+  }).then((newsArray) => {
     res.render('news/news', {
       title: 'news',
-      post_titles: postArray
+      news_titles: newsArray
     });
   }).catch((error) => {
     res.status(500).send('one of the queries failed', error);
   });
 };
 
-exports.viewPost = (req, res, next) => {
+exports.viewNewsPost = (req, res, next) => {
   console.log(req.params.postid);
 
-  Post.findById(req.params.postid, (err, article) => {
+  NewsPost.findById(req.params.postid, (err, article) => {
     if (err) {
       return next(err);
     }

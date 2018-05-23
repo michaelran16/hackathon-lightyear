@@ -9,13 +9,10 @@ router.get('/', (req, res) => {
   });
 });
 
-router.get('/save', async (req, res) => {
-  const str = '<h2>save</h2>';
-
-  res.render('paste/abc', {
-    title: 'Horizon Testing Tools',
-    dynamic_content: str
-  });
+router.get('/new', async (req, res) => {
+  var newId = Math.floor(Math.random() * 1000);
+  
+  res.redirect(newId);
 });
 
 // TODO post the form

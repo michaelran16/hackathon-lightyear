@@ -1,5 +1,9 @@
 extends ../layout
 
+block menu-item
+  li.nav-item(class=(title === 'API Examples') ? 'active' : undefined)
+    a.nav-link(href='/api') api
+
 block content
   h2 API Examples
   hr

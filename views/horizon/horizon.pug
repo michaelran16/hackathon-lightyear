@@ -1,5 +1,9 @@
 extends ../layout
 
+block menu-item
+  li.nav-item(class=(title === 'horizon') ? 'active' : undefined)
+    a.nav-link(href='/horizon') horizon
+
 block content
   h1 Horizon
   p.lead Internal Page for testing Horizon network.

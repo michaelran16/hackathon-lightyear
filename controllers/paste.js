@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   res.render('paste/paste', {
-    title: 'Paste Tools'
+    title: 'paste'
   });
 });
 

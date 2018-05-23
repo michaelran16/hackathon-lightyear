@@ -19,8 +19,8 @@ StellarSdk.Network.useTestNetwork();
 // StellarSdk.Network.usePublicNetwork();
 
 router.get('/', (req, res) => {
-  res.render('horizon/index', {
-    title: 'Horizon Testing Tools'
+  res.render('horizon/horizon', {
+    title: 'horizon'
   });
 });
 
@@ -79,7 +79,7 @@ router.get('/payment', async (req, res) => {
 
   str += '<p>transaction submitted, see console for output</p>';
 
-  res.render('horizon/index', {
+  res.render('horizon/horizon', {
     title: 'Horizon Testing Tools',
     dynamic_content: str
   });
@@ -156,7 +156,7 @@ router.get('/trade_aggregation', async (req, res) => {
   console.log(tradeAggregation.url);
   str += `<p><a href='${tradeAggregation.url}'>Trade Agg URL</a></p>`;
 
-  res.render('horizon/index', {
+  res.render('horizon/horizon', {
     title: 'Horizon Testing Tools',
     dynamic_content: str
   });
@@ -195,7 +195,7 @@ router.get('/trust_recp', async (req, res) => {
 
           str += JSON.stringify(transactionResult, null, 2);
 
-          res.render('horizon/index', {
+          res.render('horizon/horizon', {
             title: 'Horizon Testing Tools',
             dynamic_content: str
           });
@@ -236,7 +236,7 @@ router.get('/untrust_recp', async (req, res) => {
 
           str += JSON.stringify(transactionResult, null, 2);
 
-          res.render('horizon/index', {
+          res.render('horizon/horizon', {
             title: 'Horizon Testing Tools',
             dynamic_content: str
           });
@@ -268,7 +268,7 @@ router.get('/bridge/payment', async (req, res) => {
     str += body;
     // str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
 
-    res.render('horizon/index', {
+    res.render('horizon/horizon', {
       title: 'Horizon Testing Tools',
       dynamic_content: str
     });

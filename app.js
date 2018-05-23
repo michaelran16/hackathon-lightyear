@@ -139,10 +139,10 @@ app.use('/TODO-clean-up-routes', routes);
  * Additional app routes added by me.
  */
 // http://localhost:8080/post
-const postController = require('./controllers/post');
+const postController = require('./controllers/news');
 
-app.get('/post', postController.index);
-app.get('/post/:postid', postController.viewPost);
+app.get('/news', postController.index);
+app.get('/news/:postid', postController.viewPost);
 
 // http://localhost:8080/horizon/
 const horizonController = require('./controllers/horizon');

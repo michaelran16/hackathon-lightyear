@@ -4,7 +4,7 @@ const striptags = require('striptags');
 
 
 exports.index = (req, res) => {
-  Post.find({}).then((posts) => {
+  Post.find({}).limit(8).then((posts) => {
     const postArray = [];
 
     posts.forEach((doc) => {
@@ -27,8 +27,8 @@ exports.index = (req, res) => {
 
     return Promise.all(postArray);
   }).then((postArray) => {
-    res.render('post', {
-      title: '区块链新闻',
+    res.render('news/news', {
+      title: 'news',
       post_titles: postArray
     });
   }).catch((error) => {
@@ -45,7 +45,7 @@ exports.viewPost = (req, res, next) => {
     }
 
     console.log(article.title);
-    res.render('article', {
+    res.render('news/article', {
       article
     });
   });

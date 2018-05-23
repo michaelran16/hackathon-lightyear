@@ -1,4 +1,8 @@
-extends layout
+extends ../layout
+
+block menu-item
+  li.nav-item(class=(title === 'news') ? 'active' : undefined)
+    a.nav-link(href='/news') news
 
 block content
   h1 区块链新闻
@@ -10,4 +14,4 @@ block content
           h2 #{val['short_title']}
           p #{val['short_body']}
           p
-            a.btn.btn-default(href='/post/' + val['id'], role='button') View details »
+            a.btn.btn-default(href='/news/' + val['id'], role='button') View details »

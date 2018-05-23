@@ -1,4 +1,8 @@
-extends layout
+extends ../layout
+
+block menu-item
+  li.nav-item(class=(title === 'news') ? 'active' : undefined)
+    a.nav-link(href='/news') news
 
 block content
   h1 区块链新闻

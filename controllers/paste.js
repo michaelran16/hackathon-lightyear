@@ -21,9 +21,7 @@ router.get('/save', async (req, res) => {
 // TODO post the form
 router.post('/load', async (req, res) => {
   console.log(req.body.short_id_input);
-  res.render('paste/view', {
-    respStr: req.body.short_id_input
-  });
+  res.redirect(`/paste/${  req.body.short_id_input}`);
 });
 
 router.get('/:shortId', async (req, res) => {

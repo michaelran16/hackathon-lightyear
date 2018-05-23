@@ -1,13 +1,18 @@
 extends ../layout
 
 block content
-  h1 Paste Tool
+  h1 
+    a(href='/paste') Paste Tool
   p.lead Internal Tool for text sharing.
   hr
   .row
     .col-sm-3
       a.btn.btn-default.btn-block(href='/paste/new', role='button') New Paste »
-      a.btn.btn-default.btn-block(href='/paste/#', role='button') Load Paste »
+      form(method='POST' action="/paste/load")
+        div.form-group
+          input#name.form-control(type='text', placeholder='Enter short ID here' name='short_id_input')
+          input(type='hidden', name='_csrf', value=_csrf)
+          button.btn.btn-default.btn-block(type='submit') Load »
     .col-sm-9
       textarea#resp( name="resp", rows="26", placeholder='Input your text here', style="width:100%" )
         | #{respStr}

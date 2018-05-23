@@ -158,6 +158,7 @@ app.use('/paste', pasteController);
  * Primary app routes.
  */
 app.get('/', homeController.index);
+app.get('/home', homeController.home);
 app.get('/login', userController.getLogin);
 app.post('/login', userController.postLogin);
 app.get('/logout', userController.logout);

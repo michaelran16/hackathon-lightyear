@@ -17,5 +17,8 @@ block content
           input(type='hidden', name='_csrf', value=_csrf)
           button.btn.btn-default.btn-block(type='submit') Load »
     .col-sm-9
-      textarea#resp( name="resp", rows="26", placeholder='Input your text here', style="width:100%" )
-        | #{respStr}
+      form(method='POST' action="/paste/save")
+        textarea#resp( name="resp", rows="26", placeholder='Input your text here', style="width:100%" )
+          | #{respStr}
+        input(type='hidden', name='_csrf', value=_csrf)
+        button.btn.btn-success.btn-block(type='submit') Save »

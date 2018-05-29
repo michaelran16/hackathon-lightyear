@@ -11,14 +11,18 @@ router.get('/', (req, res) => {
 
 router.get('/new', async (req, res) => {
   var newId = Math.floor(Math.random() * 1000);
-  
+
   res.redirect(newId);
 });
 
-// TODO post the form
 router.post('/load', async (req, res) => {
   console.log(req.body.short_id_input);
   res.redirect(`/paste/${  req.body.short_id_input}`);
+});
+
+router.post('/save', async (req, res) => {
+  console.log('save save');
+  res.send('save');
 });
 
 router.get('/:shortId', async (req, res) => {

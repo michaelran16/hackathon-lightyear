@@ -13,4 +13,9 @@ install:
 script:
   - npm run lint
   - npm test
-
+# Added by Michael
+env:
+  - MY_VAR=EverythignIsAwesome
+  - NODE_ENV=TEST
+before_deploy:
+- mv .env.example config-fb.mbp.env

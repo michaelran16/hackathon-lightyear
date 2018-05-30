@@ -10,7 +10,7 @@ exports.index = (req, res) => {
     news.forEach((doc) => {
       const {
         _id,
-        source_url,
+        sourceUrl,
         body,
         title
       } = doc;
@@ -19,7 +19,7 @@ exports.index = (req, res) => {
         id: _id,
         short_title: `${title.substring(0, 9)}...`,
         full_title: title,
-        source_url,
+        sourceUrl,
         short_body: `${striptags(body).substring(0, 99)}...`,
         full_body: body,
       });
@@ -31,9 +31,10 @@ exports.index = (req, res) => {
       title: 'news',
       news_titles: newsArray
     });
-  }).catch((error) => {
-    res.status(500).send('one of the queries failed', error);
-  });
+  })
+    .catch((error) => {
+      res.status(500).send('one of the queries failed', error);
+    });
 };
 
 exports.viewNewsPost = (req, res, next) => {

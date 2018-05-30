@@ -134,6 +134,9 @@ router.get('/receive', async (req, res) => {
       console.error(error.stack || error);
     }
   });
+
+  // TODO handle response
+  console.log(res.status);
 });
 
 // http://localhost:8080/horizon/trade_aggregation
@@ -148,8 +151,7 @@ router.get('/trade_aggregation', async (req, res) => {
     assetObject2,
     Date.now() - (1000 * 3600 * 24 * 10), // 1 days
     Date.now(),
-    1000 * 60 * 5 // 5 minutes
-  );
+    1000 * 60 * 5); // 5 minutes
   // console.log( tradeAggregation);
   str += '<p>transaction_aggregation builder created, check console</p>';
 
@@ -266,7 +268,8 @@ router.get('/bridge/payment', async (req, res) => {
 
     str += '<p>payment post finished, check console</p>';
     str += body;
-    // str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR(JSON.stringify(body.result_xdr), 'base64'));
+    // str += JSON.stringify(StellarSdk.xdr.TransactionEnvelope.fromXDR
+    // (JSON.stringify(body.result_xdr), 'base64'));
 
     res.render('horizon/horizon', {
       title: 'Horizon Testing Tools',

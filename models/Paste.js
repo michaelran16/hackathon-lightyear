@@ -6,7 +6,6 @@ const pasteSchema = new mongoose.Schema({
 }, { timestamps: true });
 
 
-
 const Paste = mongoose.model('Paste', pasteSchema);
 
-module.exports = User;
+module.exports = Paste;

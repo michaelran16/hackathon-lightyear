@@ -2,9 +2,17 @@ const request = require('supertest');
 const app = require('../app.js');
 
 describe('GET /', () => {
-  it('should return 200 OK', (done) => {
+  it('should return 302 redirect', (done) => {
     request(app)
       .get('/')
+      .expect(302, done);
+  });
+});
+
+describe('GET /home', () => {
+  it('should return 200 OK', (done) => {
+    request(app)
+      .get('/home')
       .expect(200, done);
   });
 });

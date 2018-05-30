@@ -13,3 +13,6 @@ install:
 script:
   - npm run lint
   - npm test
+TWILIO_SID:AC6f0edc4c47becc6d0a952536fc9a6025
+TWILIO_TOKEN:a67170ff7afa2df3f4c7d97cd240d0f3
+

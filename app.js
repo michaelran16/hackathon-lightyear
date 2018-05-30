@@ -132,26 +132,18 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // http://localhost:8080/TODO-clean-up-routes
 // https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
 const routes = require('./routes');
-
 app.use('/TODO-clean-up-routes', routes);
 
 /**
  * Additional app routes added by me.
  */
-// http://localhost:8080/post
 const postController = require('./controllers/news');
+const horizonController = require('./controllers/horizon');
+const pasteController = require('./controllers/paste');
 
 app.get('/news', postController.index);
 app.get('/news/:postid', postController.viewNewsPost);
-
-// http://localhost:8080/horizon/
-const horizonController = require('./controllers/horizon');
-
 app.use('/horizon', horizonController);
-
-// http://localhost:8080/paste/
-const pasteController = require('./controllers/paste');
-
 app.use('/paste', pasteController);
 
 /**

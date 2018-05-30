@@ -1,3 +1,7 @@
+# Added by Michael
+config-fb-mbp.env
+
+
 lib-cov
 *.seed
 *.log

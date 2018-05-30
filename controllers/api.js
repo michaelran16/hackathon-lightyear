@@ -244,7 +244,7 @@ exports.getTwitter = async (req, res, next) => {
     access_token_secret: token.tokenSecret
   });
   try {
-    const { statuses: tweets } = await T.get('search/tweets', {
+    const { data: { statuses: tweets } } = await T.get('search/tweets', {
       q: 'nodejs since:2013-01-01',
       geocode: '40.71448,-74.00598,5mi',
       count: 10
@@ -411,11 +411,10 @@ exports.postTwilio = (req, res, next) => {
     from: '+13472235148',
     body: req.body.message
   };
-  twilio.sendMessage(message, (err, responseData) => {
-    if (err) { return next(err.message); }
-    req.flash('success', { msg: `Text sent to ${responseData.to}.` });
+  twilio.messages.create(message).then((sentMessage) => {
+    req.flash('success', { msg: `Text send to ${sentMessage.to}` });
     res.redirect('/api/twilio');
-  });
+  }).catch(next);
 };
 
 /**

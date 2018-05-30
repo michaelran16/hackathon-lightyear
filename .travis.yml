@@ -10,9 +10,8 @@ cache:
 sudo: false
 install:
   - npm install
+before_deploy:
+- cp .env.example config-fb-mbp.env
 script:
   - npm run lint
   - npm test
-# Added by Michael
-before_deploy:
-- cp .env.example config-fb-mbp.env

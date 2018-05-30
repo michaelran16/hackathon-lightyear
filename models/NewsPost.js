@@ -5,7 +5,7 @@ const newsPostSchema = new mongoose.Schema({
   body: String,
   source_url: String,
   title: String,
-  date: Date
+  date: Date,
 });
 
 const NewsPost = mongoose.model('Post', newsPostSchema);

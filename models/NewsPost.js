@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
-
-const newsPostSchema = new Schema({
-  author: ObjectId,
+const newsPostSchema = new mongoose.Schema({
+  author: mongoose.Schema.Types.ObjectId,
   body: String,
   source_url: String,
   title: String,

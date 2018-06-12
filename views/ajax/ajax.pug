@@ -1,0 +1,42 @@
+extends ../layout
+
+block menu-item
+  li.nav-item(class=(title === 'Ajax') ? 'active' : undefined)
+    a.nav-link(href='/ajax') Paste
+
+block content
+  script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js')
+  script.
+    $(document).ready(function(){
+      //- alert('asdflj 123124');
+      $(function(){
+          $('#select_link').click(function(e){
+              e.preventDefault();
+              console.log('select_link clicked');
+      var data = {
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+            };
+      data.title = "title";
+      data.message = "message";
+
+      $.ajax({
+      type: 'POST',
+      data: JSON.stringify(data),
+          contentType: 'application/json',
+                  url: '/ajax/ajaxURL',
+                  success: function(data) {
+                    alert('post to /ajax/ajaxURL get reponse' + data);
+                  }
+              });
+          });				
+      });
+    });
+  h1 Ajax Tool
+  p.lead Internal Tool for testing Ajax.
+  hr
+  .row
+    .col-sm-3
+      a.btn.btn-default.btn-block(href='/ajax/ajaxURL', role='button') Non Ajax »
+    .col-sm-9
+      button.btn.btn-success.btn-block(type='/ajax/ajaxURL') Save »
+      <div id="select_div"><a href="#" id="select_link">Test</a></div>  

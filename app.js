@@ -99,7 +99,10 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use((req, res, next) => {
+  // if got CSRF token missing error, bypass csrf this way:
   if (req.path === '/api/upload') {
+    next();
+  } else if (req.path === '/ajax/ajaxURL') {
     next();
   } else {
     lusca.csrf()(req, res, next);
@@ -141,11 +144,14 @@ app.use('/TODO-clean-up-routes', routes);
 const postController = require('./controllers/news');
 const horizonController = require('./controllers/horizon');
 const pasteController = require('./controllers/paste');
+const ajaxController = require('./controllers/ajax');
 
 app.get('/news', postController.index);
 app.get('/news/:postid', postController.viewNewsPost);
 app.use('/horizon', horizonController);
 app.use('/paste', pasteController);
+
+app.use('/ajax', ajaxController);
 
 /**
  * Primary app routes.

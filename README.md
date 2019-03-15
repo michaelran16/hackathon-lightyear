@@ -21,7 +21,27 @@ node app.js
 # Use nodemon to run
 sudo npm install -g nodemon
 nodemon 
+
+# Run MongoDB
+# For Windows: 
+"C:\Program Files\MongoDB\Server\4.0\bin\mongo.exe"
+
 ```
+
+Now check the preview at: http://localhost:8080/
+
+```bash
+# install Heroku, then
+heroku login
+heroku local
+
+# link remote heroku app to current local repo
+heroku git:remote -a lightyear -r heroku
+# Now deploy
+git push heroku master
+```
+
+Now check the heroku instance at: http://localhost:5000/
 
 Original Contributor
 ---------------

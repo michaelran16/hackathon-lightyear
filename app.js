@@ -136,6 +136,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
 // http://localhost:8080/TODO-clean-up-routes
 // https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers
 const routes = require('./routes');
+
 app.use('/TODO-clean-up-routes', routes);
 
 /**

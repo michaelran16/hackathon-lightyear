@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/ajaxURL', (req, res) => {
-  console.log("hello ajax");
+  console.log('hello ajax');
   res.send('I want this string to return to the client');
 });
 

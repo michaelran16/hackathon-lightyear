@@ -1,0 +1,16 @@
+extends ../layout
+
+block menu-item
+  li.nav-item(class=(title === 'browser') ? 'active' : undefined)
+    a.nav-link(href='/horizon') horizon
+
+block content
+  .row
+    .col-sm-3
+    .col-sm-6
+      h2 Start by enter an ID (account/transaction/ledger)
+        p
+          input(type='text', name='year', value='')
+          a.btn.btn-default.btn-block(href='/horizon/payment', role='button') Horizon payment »
+          <button type="button" class="btn btn-primary btn-block">Primary</button>
+    .col-sm-3

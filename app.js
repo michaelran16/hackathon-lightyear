@@ -139,18 +139,22 @@ const routes = require('./routes');
 
 app.use('/TODO-clean-up-routes', routes);
 
+
 /**
  * Additional app routes added by me.
  */
 const postController = require('./controllers/news');
 const horizonController = require('./controllers/horizon');
 const pasteController = require('./controllers/paste');
+const browserController = require('./controllers/browser');
 const ajaxController = require('./controllers/ajax');
+
 
 app.get('/news', postController.index);
 app.get('/news/:postid', postController.viewNewsPost);
 app.use('/horizon', horizonController);
 app.use('/paste', pasteController);
+app.use('/browser', browserController);
 
 app.use('/ajax', ajaxController);
 

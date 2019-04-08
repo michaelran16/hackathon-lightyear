@@ -141,7 +141,7 @@ app.use('/TODO-clean-up-routes', routes);
 
 
 /**
- * Additional app routes added by me.
+ * Additional app routes added by Michael.
  */
 const postController = require('./controllers/news');
 const horizonController = require('./controllers/horizon');
@@ -149,7 +149,8 @@ const pasteController = require('./controllers/paste');
 const browserController = require('./controllers/browser');
 const ajaxController = require('./controllers/ajax');
 
-
+// if use app.use() then in the controller: express.Router().get()
+// if use app.get() then in the controller: exports.index = (req, res) => {}
 app.get('/news', postController.index);
 app.get('/news/:postid', postController.viewNewsPost);
 app.use('/horizon', horizonController);
@@ -179,6 +180,12 @@ app.post('/account/profile', passportConfig.isAuthenticated, userController.post
 app.post('/account/password', passportConfig.isAuthenticated, userController.postUpdatePassword);
 app.post('/account/delete', passportConfig.isAuthenticated, userController.postDeleteAccount);
 app.get('/account/unlink/:provider', passportConfig.isAuthenticated, userController.getOauthUnlink);
+
+//
+// app.get('/new_movie', function(req, res){
+//     var myText = req.query.id;
+//     res.send('Your Text:' +myText);
+// });
 
 /**
  * API examples routes.

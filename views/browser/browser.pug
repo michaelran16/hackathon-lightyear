@@ -8,9 +8,15 @@ block content
   .row
     .col-sm-3
     .col-sm-6
-      h2 Start by enter an ID (account/transaction/ledger)
-        p
-          input(type='text', name='year', value='')
-          a.btn.btn-default.btn-block(href='/horizon/payment', role='button') Horizon payment »
-          <button type="button" class="btn btn-primary btn-block">Primary</button>
-    .col-sm-3
+      h2 Start by enter an Stellar ID
+
+      //input#xlm-id.form-control(type='text' placeholder='Account/transaction/ledger ID' name='xlm-id' required='true')
+      //a.btn.btn-default.btn-block(href='/horizon/payment', role='button') Horizon payment »
+      //<button type="button" class="btn btn-primary btn-block">Primary</button>
+
+      form.form-horizontal(action="/browser/view" method='GET')
+        .form-group
+            input.form-control(type='input', name='id', id='id',
+              placeholder='Account/transaction/ledger ID', autofocus, required)
+        .form-group
+            button.btn.btn-primary.btn-block(type='submit') Browse »

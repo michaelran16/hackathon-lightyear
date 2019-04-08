@@ -79,6 +79,7 @@ router.get('/view', async (req, res) => {
       console.log("Error: " + err.message);
     });
   } else {
+    // TODO check ledger ID, asset code,
     res.render('browser/unknown', {
       respStr: xlmID + ' length ' + xlmID.length
     });

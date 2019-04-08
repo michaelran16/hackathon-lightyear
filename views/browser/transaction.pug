@@ -1,0 +1,9 @@
+extends ../layout
+
+block menu-item
+  li.nav-item(class=(title === 'Paste') ? 'active' : undefined)
+    a.nav-link(href='/paste') Paste
+
+block content
+  h1 Transaction
+  p.lead #{parseData.hash}

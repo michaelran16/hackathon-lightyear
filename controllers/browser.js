@@ -23,7 +23,7 @@ router.get('/view', async (req, res) => {
 
   // Now decide if the ID is: 1. account 2. tx 3. ledger 4. other type of ID
   if (xlmID.length == 56 && xlmID.charAt(0) == 'G') {
-    // Check if ID is account ID
+    // 1. Check if ID is account ID
     var horizonString = 'https://horizon.stellar.org/accounts/' + xlmID;
     https.get(horizonString, (resp) => {
       let data = '';
@@ -32,7 +32,6 @@ router.get('/view', async (req, res) => {
       resp.on('data', (chunk) => {
         data += chunk;
       });
-
       console.log(`Processing HTTPS result on ${horizonString}`);
 
       // The whole response has been received. Print out the result.
@@ -51,22 +50,39 @@ router.get('/view', async (req, res) => {
     }).on("error", (err) => {
       console.log("Error: " + err.message);
     });
+  } else if (xlmID.length == 64) {
+    // 2. Check if ID is transaction ID
+    var horizonString = 'https://horizon.stellar.org/transactions/' + xlmID;
+    https.get(horizonString, (resp) => {
+      let data = '';
+      console.log(`Start to print HTTPS result on ${horizonString}`);
+      // A chunk of data has been recieved.
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+      console.log(`Processing HTTPS result on ${horizonString}`);
+
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        console.log('hash from HTTPS response is ' + JSON.parse(data).hash);
+        if (JSON.parse(data).hash == xlmID) {
+          res.render('browser/transaction', {
+            parseData: JSON.parse(data)
+          });
+        } else {
+          res.render('browser/unknown', {
+            respStr: xlmID
+          });
+        }
+      });
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
   } else {
     res.render('browser/unknown', {
-      respStr: xlmID
+      respStr: xlmID + ' length ' + xlmID.length
     });
   }
-});
-
-// http://localhost:8080/horizon/transaction
-router.get('/payment', async (req, res) => {
-  let str = '<h2>start testing transaction with payment opeartion...</h2>';
-  let transaction;
-
-  res.render('horizon/horizon', {
-    title: 'Horizon Testing Tools',
-    dynamic_content: str
-  });
 });
 
 module.exports = router;

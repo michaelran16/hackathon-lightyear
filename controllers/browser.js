@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 const StellarSdk = require('stellar-sdk');
+const https = require('https');
+
 
 router.get('/', (req, res) => {
   res.render('browser/browser', {
@@ -9,14 +11,51 @@ router.get('/', (req, res) => {
   });
 });
 
-
 router.get('/view', async (req, res) => {
   var xlmID = req.query.id;
-  console.log(xlmID);
 
-  res.render('paste/view', {
-    respStr: 'Your Text:' + xlmID
-  });
+  // TODO remove
+  if (xlmID == '') {
+    xlmID = 'GAPMTZ5M6HPGBLRUCEPDXGZB7K5IYN7IUWYKQGSB4BC47P27OB7E6NW5';
+  }
+  console.log(xlmID);
+  // TODO end
+
+  // Now decide if the ID is: 1. account 2. tx 3. ledger 4. other type of ID
+  if (xlmID.length == 56 && xlmID.charAt(0) == 'G') {
+    // Check if ID is account ID
+    var horizonString = 'https://horizon.stellar.org/accounts/' + xlmID;
+    https.get(horizonString, (resp) => {
+      let data = '';
+      console.log(`Start to print HTTPS result on ${horizonString}`);
+      // A chunk of data has been recieved.
+      resp.on('data', (chunk) => {
+        data += chunk;
+      });
+
+      console.log(`Processing HTTPS result on ${horizonString}`);
+
+      // The whole response has been received. Print out the result.
+      resp.on('end', () => {
+        console.log('account_id from HTTPS response is ' + JSON.parse(data).account_id);
+        if (JSON.parse(data).account_id == xlmID) {
+          res.render('browser/account', {
+            parseData: JSON.parse(data)
+          });
+        } else {
+          res.render('browser/unknown', {
+            respStr: xlmID
+          });
+        }
+      });
+    }).on("error", (err) => {
+      console.log("Error: " + err.message);
+    });
+  } else {
+    res.render('browser/unknown', {
+      respStr: xlmID
+    });
+  }
 });
 
 // http://localhost:8080/horizon/transaction

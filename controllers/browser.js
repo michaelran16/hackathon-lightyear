@@ -12,19 +12,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/view', async (req, res) => {
-  var xlmID = req.query.id;
+  let xlmID = req.query.id;
 
   // TODO remove
-  if (xlmID == '') {
+  if (xlmID === '') {
     xlmID = 'GAPMTZ5M6HPGBLRUCEPDXGZB7K5IYN7IUWYKQGSB4BC47P27OB7E6NW5';
   }
   console.log(xlmID);
   // TODO end
 
   // Now decide if the ID is: 1. account 2. tx 3. ledger 4. other type of ID
-  if (xlmID.length == 56 && xlmID.charAt(0) == 'G') {
+  if (xlmID.length === 56 && xlmID.charAt(0) === 'G') {
     // 1. Check if ID is account ID
-    var horizonString = 'https://horizon.stellar.org/accounts/' + xlmID;
+    let horizonString = 'https://horizon.stellar.org/accounts/ ${xlmID}';
     https.get(horizonString, (resp) => {
       let data = '';
       console.log(`Start to print HTTPS result on ${horizonString}`);
@@ -36,7 +36,7 @@ router.get('/view', async (req, res) => {
 
       // The whole response has been received. Print out the result.
       resp.on('end', () => {
-        console.log('account_id from HTTPS response is ' + JSON.parse(data).account_id);
+        console.log('account_id from HTTPS response is ${JSON.parse(data).account_id}');
         if (JSON.parse(data).account_id == xlmID) {
           res.render('browser/account', {
             parseData: JSON.parse(data)
@@ -50,7 +50,7 @@ router.get('/view', async (req, res) => {
     }).on("error", (err) => {
       console.log("Error: " + err.message);
     });
-  } else if (xlmID.length == 64) {
+  } else if (xlmID.length === 64) {
     // 2. Check if ID is transaction ID
     var horizonString = 'https://horizon.stellar.org/transactions/' + xlmID;
     https.get(horizonString, (resp) => {

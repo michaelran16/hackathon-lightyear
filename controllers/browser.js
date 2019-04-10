@@ -1,7 +1,6 @@
 const express = require('express');
 
 const router = express.Router();
-const StellarSdk = require('stellar-sdk');
 const https = require('https');
 
 
@@ -24,7 +23,7 @@ router.get('/view', async (req, res) => {
   // Now decide if the ID is: 1. account 2. tx 3. ledger 4. other type of ID
   if (xlmID.length === 56 && xlmID.charAt(0) === 'G') {
     // 1. Check if ID is account ID
-    let horizonString = 'https://horizon.stellar.org/accounts/ ${xlmID}';
+    const horizonString = 'https://horizon.stellar.org/accounts/${xlmID}';
     https.get(horizonString, (resp) => {
       let data = '';
       console.log(`Start to print HTTPS result on ${horizonString}`);
@@ -47,12 +46,12 @@ router.get('/view', async (req, res) => {
           });
         }
       });
-    }).on("error", (err) => {
-      console.log("Error: " + err.message);
+    }).on('error', (err) => {
+      console.log(`Error: ${err.message}`);
     });
   } else if (xlmID.length === 64) {
     // 2. Check if ID is transaction ID
-    var horizonString = 'https://horizon.stellar.org/transactions/' + xlmID;
+    const horizonString = `https://horizon.stellar.org/transactions/${xlmID}`;
     https.get(horizonString, (resp) => {
       let data = '';
       console.log(`Start to print HTTPS result on ${horizonString}`);
@@ -64,8 +63,8 @@ router.get('/view', async (req, res) => {
 
       // The whole response has been received. Print out the result.
       resp.on('end', () => {
-        console.log('hash from HTTPS response is ' + JSON.parse(data).hash);
-        if (JSON.parse(data).hash == xlmID) {
+        console.log(`hash from HTTPS response is ${JSON.parse(data).hash}`);
+        if (JSON.parse(data).hash === xlmID) {
           res.render('browser/transaction', {
             parseData: JSON.parse(data)
           });
@@ -75,13 +74,13 @@ router.get('/view', async (req, res) => {
           });
         }
       });
-    }).on("error", (err) => {
-      console.log("Error: " + err.message);
+    }).on('error', (err) => {
+      console.log(`Error: ${err.message}`);
     });
   } else {
     // TODO check ledger ID, asset code,
     res.render('browser/unknown', {
-      respStr: xlmID + ' length ' + xlmID.length
+      respStr: `${xlmID} length ${xlmID.length}`
     });
   }
 });

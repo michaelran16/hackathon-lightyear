@@ -4,7 +4,6 @@ const router = express.Router();
 const StellarSdk = require('stellar-sdk');
 const request = require('request');
 
-
 // The source account is the account we will be signing and sending from.
 const sourceSecretKey = 'SBEIC2LB5YBET63NZZWOYC4SDKF76ZVVQJKXHSKFVVWVLQ6VKXJAD4NX';
 const sourceKeypair = StellarSdk.Keypair.fromSecret(sourceSecretKey);
@@ -12,8 +11,6 @@ const sourcePublicKey = sourceKeypair.publicKey();
 const receiverPublicKey = 'GAJUTZBH5GTVDBVFAXEBFEHSVQ4D2C3ZXIJPR5I3GYM3ASHRJLGX3EFE';
 
 const server = new StellarSdk.Server('https://horizon-testnet.stellar.org');
-// const server = new StellarSdk.Server('https://horizon.stellar.org');
-// const server = new StellarSdk.Server('http://localhost:8000/');
 
 StellarSdk.Network.useTestNetwork();
 // StellarSdk.Network.usePublicNetwork();
